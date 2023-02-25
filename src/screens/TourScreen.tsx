@@ -208,7 +208,13 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
                <Text className="flex-1 font-title text-xl font-bold text-left" style={{color: "#002A57"}}>{infoShedules.price/1} ₽ {'\n'}
                <Text>с человека</Text></Text>
                <TouchableOpacity  onPress={() => setModalVisible(true)} style={styles.zabron}>
-               <Text className="flex-1 font-title text-base text-white font-bold text-left">
+               <Text className="text-sm text-white font-bold text-center" style={{
+            
+                      paddingLeft: 15,
+                      paddingRight: 15,
+                      paddingTop: 2,
+                      paddingBottom: 2
+               }}>
                Забронировать</Text></TouchableOpacity>
                </View>
                </View>  
@@ -219,17 +225,16 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
+      <TouchableOpacity
+          onPress={() => setModalVisible(!modalVisible)}
+          style={{ flex: 1, backgroundColor: "rgba(0, 27, 54, 0.5)" }} >
+      <View className="h-[100%] mt-auto">
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Feather name="x-circle" size={30} color="#002A57" />
-            </Pressable>
-            <Text className="font-title text-xl font-bold text-center pt-5">Бронирование тура</Text>
+            <Text className="font-title text-xl font-bold text-center">Бронирование тура</Text>
+            
             {/* <View style={styles.textInput} className="flex-row justify-center align-center rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-0 bg-gray-100">
               <TextInput
                 className="flex-1 pt-2.5 pr-2.5 pb-2.5  pl-0" style={{paddingLeft: 20}}
@@ -243,8 +248,15 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
             <Text className="text-lg text-left">{counter}</Text>
             <Text className="text-lg font-bold text-left pt-2.5 pr-2.5 pb-2.5 pl-0">Стоимость:</Text>
             <Text className="text-lg text-left">{counter * infoShedules.price/1} ₽</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text className="text-sm font-bold text-center text-white">Подтвердить</Text>
+            </Pressable>
           </View>
         </View>
+        </View>
+        </TouchableOpacity>
       </Modal>
     </View>
     </ScrollView>
@@ -314,19 +326,21 @@ const styles = StyleSheet.create({
       elevation: 5,
     },
     button: {
-      borderRadius: 20,
+      backgroundColor: '#ECBE00', 
+      color: 'white',
+      borderRadius: 28,
       padding: 10,
-      elevation: 2,
+      paddingLeft: 35,
+      paddingRight: 35,
+      marginTop: 30,
+      alignSelf: 'center'
     },
     buttonOpen: {
       backgroundColor: '#F194FF',
     },
     buttonClose: {
-      position: 'absolute',
-      top: 5,
-      right: 5,
-      padding: 15,
-      borderRadius: 50
+      position: 'relative',
+
     },
     textStyle: {
       color: 'white',
