@@ -1,12 +1,17 @@
 import React , { useEffect, useState, useRef } from 'react';
 import { ImageBackground, Text, View} from 'react-native';
 import { useAuth } from '../hooks/useAuth';
-import { Animated, SafeAreaView, Image, FlatList, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { Animated, SafeAreaView, Pressable,Image, ScrollView, FlatList, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import ToursScreen from './TourScreen';
 import Pagination from './Pagination';
-  const HomeScreen  = ({ navigation}) =>  {  
+import Icon from '@expo/vector-icons/MaterialCommunityIcons'
+  
+
+const HomeScreen  = ({ navigation}) =>  {  
   const [index, setIndex] = useState(0);
+  const [favlocal] = useState()
+  const [fav,setFav] = useState([]);
   const scrollX = useRef(new Animated.Value(0)).current;  
   const [isLoading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);  
@@ -46,39 +51,30 @@ import Pagination from './Pagination';
         .then((json) => setCategories(json.data))
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
+         console.log(categories);
   }    
-
-  getInfo = () => {
-    fetch('http://81.200.150.54/api/v1/tours/')
-      .then((response) => response.json())
-      .then((json) => setInfo(json.data.image))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-}    
 
   getBanners = () => {
     fetch('http://81.200.150.54/api/v1/banners/')
       .then((response) => response.json())
       .then((json) => setBann(json.banners))
-      
       .catch((error) => console.error(error))
       // console.log(json.images);
 }    
   useEffect(() => {
       setLoading(true);
       getCategories();
-      getInfo();
+      // getInfo();
       getBanners();
-      // console.log(categories)
+
   }, []);  
   return (
-    <SafeAreaView className="w-full h-full">
-      <View>
+  <SafeAreaView style={{ flex: 1}}>
           {isLoading ? 
           <Text>Загрузка...</Text> :
           (
-        <View> 
-          <FlatList 
+        <ScrollView  showsVerticalScrollIndicator={false}>
+          <FlatList  
             data={banners}
             horizontal
             pagingEnabled
@@ -88,8 +84,8 @@ import Pagination from './Pagination';
             onViewableItemsChanged={handleOnViewableItemsChanged}
             viewabilityConfig={viewabilityConfig}
             className="rounded-3xl py-2 px-2 m-2"
-            renderItem={({ item }) => (
-              <TouchableOpacity 
+            renderItem={({ item }) => (     
+            <TouchableOpacity 
               onPress={() => navigation.navigate('ToursScreen' , {paramKey: item.id} )}>
                 <View>
                 <Image  
@@ -106,38 +102,43 @@ import Pagination from './Pagination';
                     <Text style={styles.textPanelslider}>{`${item.title}`}</Text>
                     <Text style={styles.pricePanelText}>{`${item.schedules[0].price/1}`} ₽</Text>
                 </View>
+                {/* {fav.includes(item) ? (
+                 <Pressable style={{position: "absolute", top: 15, left: 15}}  onPress={() => setFav(fav.filter((x) => x.id !== item.id))}>
+                   <Icon name="heart" size={30} color="#D92030" />
+               </Pressable>
+              ):(
+                <Pressable style={{position: "absolute", top: 15, left: 15}} onPress={() => setFav([...fav,item])}>
+                    <Icon  name="heart" size={30} color="#F2F2F2" />
+              </Pressable>
+              )} */}
               </TouchableOpacity>
             )}
             />
-                <Pagination data={banners} scrollX={scrollX} index={index} />
+            <Pagination data={banners} scrollX={scrollX} index={index} />
                 <View>
-                    <Text style={styles.zagText}>Рекомендации</Text>
+                    <Text className="flex-1 font-title text-xl font-bold text-left py-4 px-4 m-2">Рекомендации</Text>
                 </View>      
                 <FlatList 
                     className="rounded-3xl py-2 px-2 m-2"
-                    data={info}
+                    data={banners}
                     numColumns={2}
                     key={2}
+                    scrollEnabled={false}
                     renderItem={({ item }) => (
                       <TouchableOpacity  
                       style={{width: DEVICE_WIDTH/2.15, padding: 5}}
                       onPress={() => navigation.navigate('ToursScreen' , {paramKey: item.id} )}>
-                        <Text>{`${item.title}`}</Text>
-                        <Text> {`${item.id}`} </Text>
-                        {/* <Text>{`${item.schedules.price/1}`} ₽</Text> */}
-                          {/* <Image  style={{width: '100%', flex: 1, height: 180,  borderRadius: 19, resizeMode: 'cover'}}  source={{uri: 'http://81.200.150.54/storage/'+ item.data.image.image_name}}/> */}
-                          {/* <View style={styles.textPanel}>
-                          <Text>{`${item.data.title}`}</Text>
-                          <Text>{`${item.schedules[0].price/1}`} ₽</Text>
-                          </View> */}
+                        <Image  style={{width: '100%', flex: 1, height: 180,  borderRadius: 19, resizeMode: 'cover'}}  source={{uri: 'http://81.200.150.54/storage/'+ item.image.image_name}}/> 
+                        <View style={styles.Panelslider_mini}>
+                          <Text style={styles.textPanelslider_mini}>{`${item.title}`}</Text>
+                          <Text style={styles.pricePanelText_mini}>{`${item.schedules[0].price/1}`} ₽</Text>
+                         </View>
                       </TouchableOpacity>
                     )}
               />
-  </View>
+          </ScrollView>
           )}
-      </View>
     </SafeAreaView>
-    
   );
 }
 
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     position:'absolute',
     right: 20,
     left: 0,
-    bottom: 0
+    bottom: 5
   },
   textPanelslider: {
     fontSize: 20,
@@ -160,6 +161,32 @@ const styles = StyleSheet.create({
     lineHeight: '22',
     padding: 20,
     width: '80%'
+  },
+  Panelslider_mini: {
+    backgroundColor: 'rgba(0, 17, 35, 0.65)',
+    borderRadius: 19,
+    height: 80,
+    position:'absolute',
+    right: 5,
+    left: 5,
+    bottom: 5
+  },
+  textPanelslider_mini: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: 'white',
+    lineHeight: '18',
+    padding: 15,
+    width: '50%'
+  },
+  pricePanelText_mini: {
+    color: '#F4D150',
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    fontWeight: '500',
+    fontSize: 16,
   },
   zagText: {
     color: '#00274E',
@@ -200,7 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     margin: 5,
-    backgroundColor: 'rgba(0, 17, 35, 0.75)'
+    backgroundColor: 'rgba(0, 17, 35, 0.5)'
   },
   container: {
     width: '100%',

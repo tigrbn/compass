@@ -1,17 +1,15 @@
-import {Animated, FlatList, StyleSheet, Image, View, Dimensions, Text, TouchableOpacity, Button } from 'react-native';
+import {Animated, FlatList, StyleSheet, Image, View, Dimensions, TextInput, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import React, {useRef, useState, useEffect} from 'react';
-import Slides from './data';
-import SlideItem from './slideritem';
 import Pagination from './Pagination';
 import { ScrollView } from 'react-native-gesture-handler';
 import Feather from "react-native-vector-icons/Feather";
-import { StatusBar } from 'expo-status-bar';
+import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 
     const TourScreen = ({route}) =>{
     const [index, setIndex] = useState(0);
     const DEVICE_WIDTH= Dimensions.get('window').width;
     const scrollX = useRef(new Animated.Value(0)).current;
-
+    const [modalVisible, setModalVisible] = useState(false);
     const handleOnScroll = event => {
       Animated.event(
         [
@@ -43,7 +41,7 @@ import { StatusBar } from 'expo-status-bar';
     const [imgAddress, setImgAddress] = useState([]);
     const [infoShedules, setInfoShedules] = useState([]);
     const getCategory = async () => {
-    fetch('http://81.200.150.54/api/v1/tours/' + id + '/')
+    fetch('http://81.200.150.54/api/v1/tours/' + id)
     .then((response) => response.json())
     .then((json) => {
       setData(json);
@@ -112,7 +110,7 @@ import { StatusBar } from 'expo-status-bar';
     let newValue = counter; 
     if (newValue > 1) {
     newValue = counter -=1; 
-    console.log(newValue)
+    // console.log(newValue)
   }
     setCounter(newValue)
     if (newValue <= infoShedules.space_current) {
@@ -133,7 +131,7 @@ import { StatusBar } from 'expo-status-bar';
       style={{
         width: size,
         height: 50,
-        backgroundColor: "#00274E",
+        backgroundColor: "#002A57",
         borderRadius: 19,
       }}
       >
@@ -171,8 +169,9 @@ import { StatusBar } from 'expo-status-bar';
                   />)}/>
       <View className="w-full">
       <View  style={styles.whitePanel}>
+        <View style={{marginBottom: "5%"}}></View>
           <Pagination  data={imgAddress} scrollX={scrollX} index={index}/>
-               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#00274E", marginTop: "5%"}}>{data.title}</Text>
+               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#002A57", marginTop: "5%"}}>{data.title}</Text>
                <View style={{flex: 1,flexDirection: "row"}}>
                <Feather
                     className="px-4 m-2"
@@ -180,16 +179,16 @@ import { StatusBar } from 'expo-status-bar';
                     color="#001B36"
                     size={"20"}
                   />
-                <Text className="text-xl text-left" style={{color: "#00274E"}}>
+                <Text className="text-xl text-left" style={{color: "#002A57"}}>
                 {data.location}</Text>
                 </View>
                 <View style={{flex: 1,flexDirection: "row"}}>
                 <View className="rounded-3xl py-2 px-4 m-2" style={styles.counter} >
                     <Btn onPress={decrement}  title={"-"}/>
-                      <Text className="text-xl text-center rounded-3xl px-4 m-2" style={{color: "#00274E", padding: 10, backgroundColor: "#F3F3F3"}}>{counter}</Text>
+                      <Text className="text-xl text-center rounded-3xl px-4 m-2" style={{color: "#002A57", padding: 10, backgroundColor: "#F3F3F3"}}>{counter}</Text>
                     <Btn onPress={increment} disabled={isDisabled}  title={"+"} />
                 </View>
-                <Text className="text-xl text-left" style={{color: "#00274E", alignItems: "center", alignSelf: "center"}}>
+                <Text className="text-xl text-left" style={{color: "#002A57", alignItems: "center", alignSelf: "center"}}>
                <Feather
                     className="px-4 m-2"
                     name="clock"
@@ -197,24 +196,59 @@ import { StatusBar } from 'expo-status-bar';
                     size={"20"}
                   />  {infoShedules.dateForHumans}{textDay}{infoShedules.hoursForHumans} {textHourse}</Text>
                 </View>
-               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#00274E", marginTop: "5%"}}>Размер группы</Text>
-               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#00274E"}}>До {infoShedules.space_current} человек</Text>
-               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#00274E", marginTop: "5%"}}>Размещение:</Text>
-               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#00274E"}}>{data.accommodation}</Text>
-               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#00274E", marginTop: "5%"}}>Место сбора:</Text>
-               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#00274E"}}>{infoShedules.meet_place}</Text>
-               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#00274E", marginTop: "5%"}}>Описание:</Text>
-               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#00274E"}}>{data.description}</Text>
+               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#002A57", marginTop: "5%"}}>Размер группы</Text>
+               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#002A57"}}>До {infoShedules.space_current} человек</Text>
+               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#002A57", marginTop: "5%"}}>Размещение:</Text>
+               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#002A57"}}>{data.accommodation}</Text>
+               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#002A57", marginTop: "5%"}}>Место сбора:</Text>
+               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#002A57"}}>{infoShedules.meet_place}</Text>
+               <Text className="flex-1 font-title text-xl font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#002A57", marginTop: "5%"}}>Описание:</Text>
+               <Text className="text-xl text-left rounded-3xl px-4 m-2" style={{color: "#002A57"}}>{data.description}</Text>
                <View style={styles.price_container}>
-               <Text className="flex-1 font-title text-xl font-bold text-left" style={{color: "#00274E"}}>{infoShedules.price/1} ₽ {'\n'}
+               <Text className="flex-1 font-title text-xl font-bold text-left" style={{color: "#002A57"}}>{infoShedules.price/1} ₽ {'\n'}
                <Text>с человека</Text></Text>
-               <TouchableOpacity style={styles.zabron}>
+               <TouchableOpacity  onPress={() => setModalVisible(true)} style={styles.zabron}>
                <Text className="flex-1 font-title text-base text-white font-bold text-left">
                Забронировать</Text></TouchableOpacity>
                </View>
                </View>  
       </View>
+      <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Feather name="x-circle" size={30} color="#002A57" />
+            </Pressable>
+            <Text className="font-title text-xl font-bold text-center pt-5">Бронирование тура</Text>
+            {/* <View style={styles.textInput} className="flex-row justify-center align-center rounded-xl pt-2.5 pr-2.5 pb-2.5 pl-0 bg-gray-100">
+              <TextInput
+                className="flex-1 pt-2.5 pr-2.5 pb-2.5  pl-0" style={{paddingLeft: 20}}
+                placeholder="Напишите Ваше Ф.И.О."/>
+            </View> */}
+            {/* <Text className="text-lg font-bold text-left pt-2.5 pr-2.5 pb-2.5 pl-0">Туроператор:</Text>
+            <Text className="text-lg text-left">{data.operator.name}</Text> */}
+            <Text className="text-lg font-bold text-left pt-2.5 pr-2.5 pb-2.5 pl-0">Название тура:</Text>
+            <Text className="text-lg text-left">{data.title}</Text>
+            <Text className="text-lg font-bold text-left pt-2.5 pr-2.5 pb-2.5 pl-0">Количество мест:</Text>
+            <Text className="text-lg text-left">{counter}</Text>
+            <Text className="text-lg font-bold text-left pt-2.5 pr-2.5 pb-2.5 pl-0">Стоимость:</Text>
+            <Text className="text-lg text-left">{counter * infoShedules.price/1} ₽</Text>
+          </View>
+        </View>
+      </Modal>
+    </View>
     </ScrollView>
+    
   );
 };
 
@@ -230,10 +264,10 @@ const styles = StyleSheet.create({
     mapPng: {
       width: 20,
       height: 20,
-      tintColor: "#00274E",
+      tintColor: "#002A57",
     },
     dataTitle: {
-        color: '#001B36',
+        color: '#0E1F40',
         fontSize: 20,
         paddingLeft: 10,
         marginLeft: 45,
@@ -257,7 +291,63 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       alignItems: "center",
       width: "45%"
-    }
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 22,
+    },
+    modalView: {
+      margin: 40,
+      backgroundColor: 'white',
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'left',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+    },
+    buttonOpen: {
+      backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+      position: 'absolute',
+      top: 5,
+      right: 5,
+      padding: 15,
+      borderRadius: 50
+    },
+    textStyle: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    modalText: {
+      position: 'absolute',
+      top: 15,
+      right: 0,
+    },
+    textInput: {
+      backgroundColor: "white",
+      shadowColor: '#171717',
+      shadowOffset: {width: -2, height: 2},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+      width: "100%",
+      marginTop: "10%",
+      marginBottom: "10%"
+    },
 })
 export default TourScreen;
 

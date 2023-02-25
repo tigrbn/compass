@@ -38,7 +38,7 @@ function SignUpScreen<StackScreenProps>({ navigation }) {
     }
 
     var passwordValid = false;
-    if(password.length == 0){
+    if(password.length === 0){
         setPasswordError("Поле должно быть заполнено");
     }        
     else if(password.length < 6){
@@ -123,6 +123,11 @@ function SignUpScreen<StackScreenProps>({ navigation }) {
           <Pressable style={styles.pressable} className="rounded-xl py-2 px-4 m-4"><Text className="text-center text-white font-bold text-base" style={{padding: 10}} onPress={signUp}>Зарегистрироваться</Text></Pressable>
         </View>
         <Text style={styles.text} className="text-center text-white font-main text-base">У Вас есть аккаунт? <Text style={styles.link}  className="text-blue" onPress={() => navigation.navigate('Sign In')}> {'\n'} Войти</Text></Text>
+        <Text style={styles.text} className="text-sm text-center">Нажимая на зарегистрироваться, Вы принимаете
+        <Text style={{color: "#0554F2"}}  className="text-sm" onPress={() => navigation.navigate('Privacy')}> Политику конфиденциальности, </Text>
+         а также даете 
+         <Text style={{color: "#0554F2"}} className="text-sm" onPress={() => navigation.navigate('Personal')}> согласие на обработку персональных данных</Text>
+         </Text>
       </View>
     </View>
   );
@@ -139,7 +144,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 37,
-    flex: 3,
+    flex: 9,
   },
   icon: {
     padding: 15,

@@ -12,6 +12,7 @@ import SearchScreen from "../screens/Search";
 // import FavoritesScreen from "../screens/Favorites";
 import Feather from 'react-native-vector-icons/Feather';
 import Subcategories from "../screens/Subcategories";
+import Favorites from "../screens/Favorites";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,7 +49,7 @@ function HomeStackScreen() {
         }}
         />
         <HomeStack.Screen name="Search" component={SearchScreen} />
-        {/* <HomeStack.Screen name="Favorites" component={FavoritesScreen} /> */}
+        <HomeStack.Screen name="Favorites" component={Favorites} />
     </HomeStack.Navigator>
   );
 }
@@ -61,7 +62,7 @@ function TourStackScreen() {
         screenOptions={{
           headerShown: true,
           cardStyle: { backgroundColor: '#fff' }
-        }}>
+        }} >
         <TourStack.Screen 
          options={{
           title: 'Виды туров',
@@ -72,9 +73,9 @@ function TourStackScreen() {
           },
         }}
         name="CategoryList" component={CategoryList}/>
-        <TourStack.Screen name="CategoryScreen" component={CategoryScreen} options={({ route }) => ({ title: route.params.name })}/>
+        <TourStack.Screen name="CategoryScreen" component={CategoryScreen} options={({ route }) => ({ title: 'Назад' })}/>
         <TourStack.Screen name="Subcategories" component={Subcategories} options={({ route }) => ({ title: route.params.name })}/>
-        <TourStack.Screen name="ToursScreen" component={ToursScreen} options={({ route }) => ({ title: route.params.name })}/>
+        <TourStack.Screen name="ToursScreen" component={ToursScreen} options={({ route }) => ({ title: '' })}/>
     </TourStack.Navigator>
   );
 }
@@ -111,8 +112,8 @@ export default function UserStack() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: { backgroundColor: "white" },
-          tabBarActiveTintColor: "#0053A9",
-          tabBarInactiveTintColor: "rgba(0, 83, 169, 0.5)",
+          tabBarActiveTintColor: "#002A57",
+          tabBarInactiveTintColor: "rgba(0, 27, 54, 0.4)",
         }}
         sceneContainerStyle={{ backgroundColor: "white" }}
       >
@@ -125,7 +126,7 @@ export default function UserStack() {
                     <Feather
                         name="align-left"
                         size={size ? size : 12}
-                        color={focused ? color : "rgba(0, 83, 169, 0.5)"}
+                        color={focused ? color : "rgba(0, 27, 54, 0.4)"}
                         focused={focused}
                
                     />
@@ -142,7 +143,7 @@ export default function UserStack() {
                     <Feather
                         name="home"
                         size={size ? size : 12}
-                        color={focused ? color : "rgba(0, 83, 169, 0.5)"}
+                        color={focused ? color : "rgba(0, 27, 54, 0.4)"}
                         focused={focused}
                
                     />
@@ -159,7 +160,7 @@ export default function UserStack() {
                     <Feather
                         name="search"
                         size={size ? size : 12}
-                        color={focused ? color : "rgba(0, 83, 169, 0.5)"}
+                        color={focused ? color : "rgba(0, 27, 54, 0.4)"}
                         focused={focused}
                
                     />
@@ -167,9 +168,9 @@ export default function UserStack() {
             }
         }
         />
-                 {/* <Tab.Screen
+      {/* <Tab.Screen
           name="Избранное"
-          component={FavoritesScreen}
+          component={Favorites}
           options={{
             tabBarShowLabel: true,
             tabBarIcon: ({ focused }) => (
@@ -179,11 +180,9 @@ export default function UserStack() {
                     color="#001B36"
                     size={"30"}
                     style={{
-                      tintColor: focused ? "#0053A9" : "rgba(0, 83, 169, 0.5)",
+                      tintColor: focused ? "#0053A9" : "rgba(0, 27, 54, 0.4)",
                     }}
-                    color={focused ? color : "#222222"}
-  focused={focused}
-  color={color}
+                   
                   />
             </View>
             ),

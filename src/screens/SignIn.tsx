@@ -35,7 +35,7 @@ function SignInScreen<StackScreenProps>({ navigation }) {
     var emailValid = false;
     if(email.length == 0){
         setEmailError("Поле должно быть заполнено");
-    }        
+    }      
     else if(email.length < 6){
         setEmailError("Электронная почта должна быть не менее 6 символов");
     }      
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 37,
-    flex: 4,
+    flex: 6,
   },
   icon: {
     padding: 15,

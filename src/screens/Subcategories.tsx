@@ -17,8 +17,6 @@ const Subcategories = ({ route: { params }, navigation }) => {
     useEffect(() => {
       setLoading(true);
       getCategories();
-      console.log(subcategories)
-
   }, []);   
   return (
     <SafeAreaView style={{marginTop: "5%"}}>
@@ -28,10 +26,10 @@ const Subcategories = ({ route: { params }, navigation }) => {
         <View className="w-full h-full">
         <FlatList
           data={subcategories}
-          keyExtractor={({ id }) => id.toString()}
+          // keyExtractor={({ id }) => id.toString()}
           renderItem={({ item }) => (
         <TouchableOpacity
-          onPress={() => navigation.navigate('TourScreen' , {paramKey: item.id, name: item.title} )}>
+          onPress={() => navigation.navigate('ToursScreen' , {paramKey: item.id, name: item.title} )}>
           <Text className="flex-1 font-title text-lg font-bold text-left rounded-3xl py-2 px-4 m-2" style={{color: "#0E1F40"}}>{`${item.title}`}</Text>
         </TouchableOpacity>
 )}
